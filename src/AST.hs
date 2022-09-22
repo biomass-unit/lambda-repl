@@ -1,19 +1,21 @@
 module AST (Expression(..)) where
 
+import BU (PrettyShow, prettyShow)
+
 
 data Expression
   = Abstraction String Expression
   | Application Expression Expression
   | Variable String
-  deriving Eq
+  deriving (Show, Eq)
 
 
-instance Show Expression where
-  show :: Expression -> String
-  show = \case
+instance PrettyShow Expression where
+  prettyShow :: Expression -> String
+  prettyShow = \case
     Abstraction parameter body ->
-      "(\\" ++ parameter ++ "." ++ show body ++ ")"
+      "(\\" ++ parameter ++ "." ++ prettyShow body ++ ")"
     Application function argument ->
-      show function ++ " " ++ show argument
+      prettyShow function ++ " " ++ prettyShow argument
     Variable name ->
       name

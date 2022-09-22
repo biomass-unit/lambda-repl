@@ -1,0 +1,16 @@
+cabal-version: 2.4
+name:          lambda-repl
+version:       0.0
+synopsis:      An interpreter for the lambda calculus
+author:        biomass-unit
+
+executable lambda-repl
+    main-is:            Main.hs
+    hs-source-dirs:     src
+    other-modules:      AST, ParserCombinators
+    build-depends:      base ^>=4.16
+    default-language:   Haskell2010
+    default-extensions: LambdaCase
+                      , BlockArguments
+                      , InstanceSigs
+                      , DuplicateRecordFields

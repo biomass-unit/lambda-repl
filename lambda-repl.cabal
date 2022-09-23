@@ -7,7 +7,7 @@ author:        biomass-unit
 executable lambda-repl
     main-is:            Main.hs
     hs-source-dirs:     src
-    other-modules:      BU, AST, ParserCombinators
+    other-modules:      BU, AST, ParserCombinators, Parser
     build-depends:      base ^>=4.16
     default-language:   Haskell2010
     default-extensions: LambdaCase

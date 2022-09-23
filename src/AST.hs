@@ -1,6 +1,6 @@
 module AST (Expression(..)) where
 
-import BU (PrettyShow, prettyShow)
+import BU
 
 
 data Expression

@@ -6,7 +6,7 @@ module ParserCombinators
 , makeInput
 , pred
 , char
-, str
+, string
 , digit
 , digits
 , int
@@ -14,7 +14,6 @@ module ParserCombinators
 ) where
 
 import Prelude      hiding (pred)
-import Data.Either         (fromRight)
 import Data.Foldable       (traverse_)
 import Data.Char           (isDigit)
 import Control.Applicative (Alternative(..))
@@ -54,7 +53,7 @@ instance Functor Parser where
   fmap :: (a -> b) -> Parser a -> Parser b
   fmap f p = Parser \i -> do
     (x, i) <- parse p i
-    pure (f x, i)
+    Right (f x, i)
 
 instance Applicative Parser where
   pure :: a -> Parser a
@@ -97,7 +96,7 @@ summarize = quote . take 10
 
 pred :: (Char -> Bool) -> String -> Parser Char
 pred predicate description
-  = Parser \i@(Input pos str) ->
+  = Parser \(Input pos str) ->
     let errorBecause = Left . Error pos . (("Expected " ++ description ++ ", but found ") ++)
     in case str of
       []                   -> errorBecause "the end of input"
@@ -107,8 +106,8 @@ pred predicate description
 char :: Char -> Parser Char
 char c = pred (== c) ['\'', c, '\'']
 
-str :: String -> Parser String
-str s = s <$ traverse_ char s
+string :: String -> Parser String
+string s = s <$ traverse_ char s
 
 digit :: Parser Char
 digit = pred isDigit "a digit"

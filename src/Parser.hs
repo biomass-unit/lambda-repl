@@ -22,7 +22,9 @@ name = (:)
 
 
 variable :: PC.Parser AST.Expression
-variable = AST.Variable <$> name
+variable = AST.Variable
+  <$> name
+  <*  PC.negated (wsd (PC.char '=')) "a nested definition"
 
 abstraction :: PC.Parser AST.Expression
 abstraction = flip (foldr AST.Abstraction)
@@ -32,3 +34,15 @@ abstraction = flip (foldr AST.Abstraction)
 expression :: PC.Parser AST.Expression
 expression = foldl' AST.Application <$> expr <*> many expr
   where expr = wsd (variable <|> abstraction <|> PC.parenthesized expression)
+
+
+topLevelDefinition :: PC.Parser AST.TopLevel
+topLevelDefinition = curry AST.TopLevelDefinition
+  <$> name <* wsd (PC.char '=')
+  <*> expression
+
+topLevelExpression :: PC.Parser AST.TopLevel
+topLevelExpression = AST.TopLevelExpression <$> expression
+
+topLevel :: PC.Parser AST.TopLevel
+topLevel = topLevelDefinition <|> topLevelExpression

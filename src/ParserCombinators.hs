@@ -7,6 +7,7 @@ module ParserCombinators
 , pred
 , char
 , string
+, negated
 , digit
 , digits
 , int
@@ -108,6 +109,15 @@ char c = pred (== c) ['\'', c, '\'']
 
 string :: String -> Parser String
 string s = s <$ traverse_ char s
+
+negated :: Parser a -> String -> Parser ()
+negated parser description = Parser \i@(Input pos _) ->
+  case parse parser i of
+    Left  _ -> Right ((), i)
+    Right _ -> Left $
+      Error { position = pos
+            , message = "Did not expect " ++ description
+            }
 
 digit :: Parser Char
 digit = pred isDigit "a digit"

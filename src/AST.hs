@@ -1,4 +1,4 @@
-module AST (Expression(..)) where
+module AST where
 
 import BU
 
@@ -7,6 +7,11 @@ data Expression
   = Abstraction String Expression
   | Application Expression Expression
   | Variable String
+  deriving (Show, Eq)
+
+data TopLevel
+  = TopLevelExpression Expression
+  | TopLevelDefinition (String, Expression)
   deriving (Show, Eq)
 
 
